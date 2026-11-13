@@ -40,7 +40,7 @@ from user_behavior ub left join `user` u
 on u.global_user_id=ub.global_user_id 
 
 
-select * from `order` o 
+select * from `order1` o 
 limit 1000
 -- 查看数据
 
@@ -58,7 +58,7 @@ u.gender ,
 u.platform_user_id ,
 u.user_level ,
 o.promotion_id  
-from `user` u  left join `order` o 
+from `user` u  left join `order1` o 
 on u.global_user_id=o.global_user_id 
 limit 1000
 -- 清洗无关数据，查看结构
@@ -77,7 +77,7 @@ u.gender ,
 u.platform_user_id ,
 u.user_level ,
 o.promotion_id 
-from `user` u  left join `order` o 
+from `user` u  left join `order1` o 
 on u.global_user_id=o.global_user_id
 -- 保留全部用户
 
@@ -95,7 +95,7 @@ u.gender ,
 u.platform_user_id ,
 u.user_level ,
 o.promotion_id 
-from `user` u  inner join `order` o 
+from `user` u  inner join `order1` o 
 on u.global_user_id=o.global_user_id
 -- 剔除沉默用户及没下单用户
 
@@ -159,7 +159,29 @@ select *
 from table4 t4 
 where t4.order_status in ('已付款','已发货','已完成')
 
+select 
+sum(
+case when order_status in ('已付款','已发货','已完成') 
+then order1.total_amount
+else 0 end )
+from order1
+-- case when 函数计算
 
+select 
+t5.total_amount,
+t5.global_user_id,
+row_number ()
+over (order  by t5.total_amount desc  )
+from table5 t5 
+-- 降序不并列排序
+
+select 
+t5.total_amount,
+t5.global_user_id,
+dense_rank ()
+over (order  by t5.total_amount desc  )
+from table5 t5 
+-- 降序并列排序
 
 
 
